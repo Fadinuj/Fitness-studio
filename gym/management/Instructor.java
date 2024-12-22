@@ -28,6 +28,6 @@ public class Instructor extends GymWorkers {
                 " | Balance: " + this.getBalance() +
                 " | Role: " + this.getClass().getSimpleName() +
                 " | Salary per Hour: " + getSalary() +
-                " | Certified Classes: " + qualifiedSessionTypes;
+                " | Certified Classes: " + qualifiedSessionTypes.toString().replace("[","").replace("]","");
     }
 }

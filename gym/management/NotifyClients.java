@@ -21,8 +21,8 @@ public class NotifyClients {
                 session.notifyClients(message);
             }
         }
-        //String formattedDate1 = DateUtils.formatDate1(date);
-        _gym.addAction("A message was sent to everyone registered for a session on " + date + " : " + message);
+        String formattedDate1 = DateUtils.formatDate1(date);
+        _gym.addAction("A message was sent to everyone registered for a session on " + formattedDate1 + " : " + message);
     }
     public void notify(String message) {
         for (Client client : _gym.getClients()) {

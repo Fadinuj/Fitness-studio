@@ -19,7 +19,9 @@ public class DateUtils {
     }
 
     public static String formatDate1(String date) {
-        LocalDateTime sessionDate = LocalDateTime.parse(date, formatter1);
+        // Parse the date as LocalDate since it doesn't contain time
+        LocalDate sessionDate = LocalDate.parse(date, formatter1);
+        // Format the date to the desired format
         return sessionDate.format(formatter3);
     }
 

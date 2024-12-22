@@ -97,7 +97,7 @@ public class Secretary extends GymWorkers {
 
         // Check if the session is full
         if (session.isFull()) {
-            gym.addAction("Failed registration: No available spots for session.");
+            gym.addAction("Failed registration: No available spots for session");
             erorFlag=true;
         }
 
