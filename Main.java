@@ -1,7 +1,16 @@
-import gym.Exception.*;
-import gym.customers.*;
-import gym.management.*;
-import gym.management.Sessions.*;
+import gym.Exception.ClientNotRegisteredException;
+import gym.Exception.DuplicateClientException;
+import gym.Exception.InstructorNotQualifiedException;
+import gym.Exception.InvalidAgeException;
+import gym.customers.Client;
+import gym.customers.Gender;
+import gym.customers.Person;
+import gym.management.Gym;
+import gym.management.Instructor;
+import gym.management.Secretary;
+import gym.management.sessions.ForumType;
+import gym.management.sessions.Session;
+import gym.management.sessions.SessionType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,9 +68,9 @@ public class Main {
         Instructor i2 = gymSecretary.hireInstructor(p5, 90, new ArrayList<>(Arrays.asList(SessionType.ThaiBoxing, SessionType.Pilates, SessionType.MachinePilates)));
         Instructor i3 = gymSecretary.hireInstructor(p6,50, new ArrayList<>(Arrays.asList(SessionType.Pilates, SessionType.Ninja)));
 
-        Session s1 = gymSecretary.addSession(SessionType.Pilates, "23-12-2024 10:00", ForumType.All, i2);
+        Session s1 = gymSecretary.addSession(SessionType.Pilates, "23-01-2025 10:00", ForumType.All, i2);
         Session s2 = gymSecretary.addSession(SessionType.MachinePilates, "23-10-2024 08:00", ForumType.Female, i1);
-        Session s3 = gymSecretary.addSession(SessionType.Pilates, "25-12-2024 09:30", ForumType.Seniors, i3);
+        Session s3 = gymSecretary.addSession(SessionType.Pilates, "25-01-2025 09:30", ForumType.Seniors, i3);
         Session s4 = gymSecretary.addSession(SessionType.ThaiBoxing, "01-01-2025 14:00", ForumType.All, i2);
         Session s5 = gymSecretary.addSession(SessionType.Ninja, "14-01-2025 20:00", ForumType.All, i3);
         Session s6 = gymSecretary.addSession(SessionType.ThaiBoxing, "14-01-2025 20:00", ForumType.Male, i1);
@@ -126,7 +135,4 @@ public class Main {
 
         System.out.print(gym);
     }
-
-
-
 }
