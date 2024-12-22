@@ -1,4 +1,3 @@
-
 Error: Client must be at least 18 years old to register
 Error: The client is already registered
 Error: Registration is required before attempting to unregister

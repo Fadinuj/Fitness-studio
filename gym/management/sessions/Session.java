@@ -7,16 +7,29 @@ import gym.management.Instructor;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Abstract base class for all session types in the gym.
+ */
 public abstract class Session {
-    protected String sessionTime;       // Time of the session
-    protected Instructor instructor;    // gym.management.Instructor assigned to the session
-    protected List<Client> clients;     // List of registered clients
-    protected ForumType forumType;      //
-    protected int maxParticipants;      // Maximum number of participants
-    protected int price;             // Price for the session
-    protected String sessionType;
 
-    // Constructor
+    protected String sessionTime;       // Time of the session in "yyyy-MM-dd HH:mm" format
+    protected Instructor instructor;    // Instructor assigned to the session
+    protected List<Client> clients;     // List of registered clients
+    protected ForumType forumType;      // Forum type for the session
+    protected int maxParticipants;      // Maximum number of participants allowed
+    protected int price;                // Price for the session
+    protected String sessionType;       // Type of the session
+
+    /**
+     * Constructor to initialize a session.
+     *
+     * @param sessionTime     The time of the session.
+     * @param instructor      The instructor leading the session.
+     * @param maxParticipants The maximum number of participants allowed.
+     * @param price           The price for the session.
+     * @param forumType       The type of forum (e.g., All, Male, Female, Seniors).
+     * @param sessionType     The name of the session type.
+     */
     public Session(String sessionTime, Instructor instructor, int maxParticipants, int price, ForumType forumType, String sessionType) {
         this.sessionTime = sessionTime;
         this.sessionType = sessionType;
@@ -27,56 +40,85 @@ public abstract class Session {
         this.price = price;
     }
 
-    // Add a client to the session
+    /**
+     * Adds a client to the session if there is space,and they meet the forum requirements.
+     *
+     * @param client The client to be added.
+     */
     public void addClient(Client client) {
         if (isFull()) {
             throw new IllegalStateException("Error: No available spots for session.");
         }
         if (!isForumCorrect(client)) {
-            throw new IllegalStateException("Error: gym.customers.Client does not meet the session's requirements.");
+            throw new IllegalStateException("Error: Client does not meet the session's requirements.");
         }
         clients.add(client);
     }
+
+    /**
+     * Checks if the session forum is restricted by gender.
+     *
+     * @return True if the forum is gender-restricted, otherwise false.
+     */
     public boolean isForumGender() {
-        return ((forumType.equals(ForumType.Male))||forumType.equals(ForumType.Female));
+        return (forumType.equals(ForumType.Male) || forumType.equals(ForumType.Female));
     }
 
-    // Check if the session is full
+    /**
+     * Checks if the session is full.
+     *
+     * @return True if the session is full, otherwise false.
+     */
     public boolean isFull() {
         return clients.size() >= maxParticipants;
     }
-    public ForumType getForumType() {
-        return forumType;
+
+    /**
+     * Checks if a client meets the forum requirements of the session.
+     *
+     * @param client The client to be checked.
+     * @return True if the client meets the requirements, otherwise false.
+     */
+    public boolean isForumCorrect(Client client) {
+        return switch (forumType) {
+            case All -> true; // All clients can participate
+            case Female -> client.getGender() == Gender.Female;
+            case Male -> client.getGender() == Gender.Male;
+            case Seniors -> client.getAge() >= 65; // Only clients aged 65 and above can participate
+            default -> false;
+        };
     }
 
-    // Notify all registered clients
+    /**
+     * Sends a notification message to all registered clients.
+     *
+     * @param message The message to be sent.
+     */
     public void notifyClients(String message) {
         for (Client client : clients) {
             client.update(message);
         }
     }
-    public boolean isForumCorrect(Client client) {
-        switch (forumType) {
-            case All:
-                return true; // כל הלקוחות יכולים להשתתף
-            case Female:
-                return client.getGender() == Gender.Female;
-            case Male:
-                return client.getGender() == Gender.Male;
-            case Seniors:
-                return client.getAge() >= 60; // תנאי לגילאי 60 ומעלה
-            default:
-                return false;
-        }
+
+    /**
+     * Checks if a client has sufficient balance to register for the session.
+     *
+     * @param client The client to be checked.
+     * @return True if the client has enough balance, otherwise false.
+     */
+    public boolean hasBalance(Client client) {
+        return client.getBalance() >= this.getPrice();
     }
 
     // Getters
     public String getSessionTime() {
         return sessionTime;
     }
+
     public String getSessionType() {
         return sessionType;
     }
+
     public Instructor getInstructor() {
         return instructor;
     }
@@ -89,13 +131,18 @@ public abstract class Session {
         return price;
     }
 
-    public boolean hasBalance(Client client) {
-        return client.getBalance() >= this.getPrice();
+    public ForumType getForumType() {
+        return forumType;
     }
 
+    /**
+     * Overrides the toString method to provide a descriptive representation of the session.
+     *
+     * @return A string representation of the session details.
+     */
     @Override
     public String toString() {
-        return "Session Type:"+this.getClass().getSimpleName() +
+        return "Session Type: " + this.getClass().getSimpleName() +
                 " | Time: " + sessionTime +
                 " | Instructor: " + instructor.getName() +
                 " | Participants: " + clients.size() + "/" + maxParticipants;
